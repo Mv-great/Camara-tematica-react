@@ -2,28 +2,26 @@ import React from 'react';
 
 interface PartnerLogoProps {
   name: string;
-  logoUrl?: string;
   altText: string;
+  imageUrl?: string;
 }
 
-const PartnerLogo: React.FC<PartnerLogoProps> = ({
-  name,
-  logoUrl,
-  altText
-}) => {
+const PartnerLogo: React.FC<PartnerLogoProps> = ({ name, altText, imageUrl }) => {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-center h-24">
-      {logoUrl ? (
+    <div className="flex flex-col items-center justify-center p-4 transition-transform hover:scale-105">
+      {imageUrl ? (
         <img 
-          src={logoUrl} 
+          src={imageUrl} 
           alt={altText} 
-          className="max-h-full max-w-full object-contain"
+          className="max-w-full h-auto object-contain"
           loading="lazy"
-          width="120"
-          height="80"
+          width="150"
+          height="100"
         />
       ) : (
-        <span className="text-gray-400 text-sm text-center">{name}</span>
+        <div className="w-full h-24 bg-gray-100 rounded-md flex items-center justify-center text-gray-600 font-medium">
+          {name}
+        </div>
       )}
     </div>
   );

@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HeroSection from './components/ui/HeroSection';
 import SectionTitle from './components/ui/SectionTitle';
-import NewsCard from './components/ui/NewsCard';
-import PartnerLogo from './components/ui/PartnerLogo';
-import ContactForm from './components/ui/ContactForm';
 import AccessibilityButton from './components/ui/AccessibilityButton';
 import './App.css';
+
+// Lazy loading de componentes não críticos para melhorar performance
+const NewsCard = lazy(() => import('./components/ui/NewsCard'));
+const PartnerLogo = lazy(() => import('./components/ui/PartnerLogo'));
+const ContactForm = lazy(() => import('./components/ui/ContactForm'));
 
 function App() {
   const [fontSize, setFontSize] = useState(16);
@@ -61,15 +63,15 @@ function App() {
   return (
     <div className={`flex flex-col min-h-screen ${highContrast ? 'high-contrast' : ''}`}>
       <Header />
-      <main className="flex-grow">
+      <main className="flex-grow" id="main-content">
         <HeroSection 
           title="Câmara Temática de Inovação" 
           subtitle="Promovendo o desenvolvimento científico, tecnológico e inovador em Assis Chateaubriand"
         />
         
-        <div className="container mx-auto px-4 py-12">
-          <section className="mb-16">
-            <div className="bg-blue-50 p-6 rounded-lg shadow-md">
+        <div className="container mx-auto px-4 py-8 md:py-12">
+          <section className="mb-12 md:mb-16">
+            <div className="bg-blue-50 p-4 md:p-6 rounded-lg shadow-md">
               <SectionTitle 
                 title="Bem-vindo ao Portal da Inovação"
                 centered={false}
@@ -88,57 +90,77 @@ function App() {
             </div>
           </section>
           
-          <section className="mb-16">
+          <section className="mb-12 md:mb-16">
             <SectionTitle 
               title="Notícias Recentes"
               subtitle="Acompanhe as últimas atividades e conquistas da Câmara Temática"
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <NewsCard 
-                title="Eleita diretoria da Câmara Temática"
-                date="13 de dezembro de 2023"
-                summary="Foi eleita a nova diretoria da Câmara Temática, composta por Joaquim José Honório de Lima como presidente, Willian Bosquette Rosa como vice-presidente e Ana Paula Pereira Frohlich como secretária."
-                link="/noticias/eleita-diretoria"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-64">Carregando...</div>}>
+                <NewsCard 
+                  title="Eleita diretoria da Câmara Temática"
+                  date="13 de dezembro de 2023"
+                  summary="Foi eleita a nova diretoria da Câmara Temática, composta por Joaquim José Honório de Lima como presidente, Willian Bosquette Rosa como vice-presidente e Ana Paula Pereira Frohlich como secretária."
+                  link="/noticias/eleita-diretoria"
+                />
+              </Suspense>
               
-              <NewsCard 
-                title="Aprovado Regimento Interno"
-                date="23 de novembro de 2023"
-                summary="Durante reunião realizada na UNIMEO/CTESOP, foi aprovada a proposta do regimento interno da Câmara Temática, que será publicado no Diário Oficial do município."
-                link="/noticias/aprovado-regimento"
-              />
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-64">Carregando...</div>}>
+                <NewsCard 
+                  title="Aprovado Regimento Interno"
+                  date="23 de novembro de 2023"
+                  summary="Durante reunião realizada na UNIMEO/CTESOP, foi aprovada a proposta do regimento interno da Câmara Temática, que será publicado no Diário Oficial do município."
+                  link="/noticias/aprovado-regimento"
+                />
+              </Suspense>
               
-              <NewsCard 
-                title="Plano de Ação em Desenvolvimento"
-                date="5 de abril de 2024"
-                summary="Com a eleição realizada, o próximo passo é colocar em prática o plano de ação da Câmara Temática, que visa implementar a política Municipal de Inovação."
-                link="/noticias/plano-acao"
-              />
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-64">Carregando...</div>}>
+                <NewsCard 
+                  title="Plano de Ação em Desenvolvimento"
+                  date="5 de abril de 2024"
+                  summary="Com a eleição realizada, o próximo passo é colocar em prática o plano de ação da Câmara Temática, que visa implementar a política Municipal de Inovação."
+                  link="/noticias/plano-acao"
+                />
+              </Suspense>
             </div>
           </section>
           
-          <section className="mb-16">
+          <section className="mb-12 md:mb-16">
             <SectionTitle 
               title="Entidades Participantes"
               subtitle="Conheça as instituições que compõem a Câmara Temática de Inovação"
             />
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              <PartnerLogo name="IFPR" altText="Logo do Instituto Federal do Paraná" />
-              <PartnerLogo name="UNIMEO/CTESOP" altText="Logo da UNIMEO/CTESOP" />
-              <PartnerLogo name="Prefeitura Municipal" altText="Logo da Prefeitura Municipal de Assis Chateaubriand" />
-              <PartnerLogo name="ACIAC" altText="Logo da Associação Comercial de Assis Chateaubriand" />
-              <PartnerLogo name="OAB" altText="Logo da Ordem dos Advogados do Brasil" />
-              <PartnerLogo name="Núcleo Regional de Educação" altText="Logo do Núcleo Regional de Educação" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-24">Carregando...</div>}>
+                <PartnerLogo name="IFPR" altText="Logo do Instituto Federal do Paraná" />
+              </Suspense>
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-24">Carregando...</div>}>
+                <PartnerLogo name="UNIMEO/CTESOP" altText="Logo da UNIMEO/CTESOP" />
+              </Suspense>
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-24">Carregando...</div>}>
+                <PartnerLogo name="Prefeitura Municipal" altText="Logo da Prefeitura Municipal de Assis Chateaubriand" />
+              </Suspense>
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-24">Carregando...</div>}>
+                <PartnerLogo name="ACIAC" altText="Logo da Associação Comercial de Assis Chateaubriand" />
+              </Suspense>
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-24">Carregando...</div>}>
+                <PartnerLogo name="OAB" altText="Logo da Ordem dos Advogados do Brasil" />
+              </Suspense>
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-24">Carregando...</div>}>
+                <PartnerLogo name="Núcleo Regional de Educação" altText="Logo do Núcleo Regional de Educação" />
+              </Suspense>
             </div>
           </section>
           
-          <section className="mb-16">
+          <section className="mb-12 md:mb-16">
             <SectionTitle 
               title="Entre em Contato"
               subtitle="Tem interesse em participar ou saber mais sobre a Câmara Temática de Inovação?"
             />
-            <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
-              <ContactForm onSubmit={handleContactSubmit} />
+            <div className="max-w-2xl mx-auto bg-white p-4 md:p-6 rounded-lg shadow-md">
+              <Suspense fallback={<div className="p-4 bg-gray-100 rounded-lg animate-pulse h-96">Carregando formulário...</div>}>
+                <ContactForm onSubmit={handleContactSubmit} />
+              </Suspense>
             </div>
           </section>
         </div>
